@@ -6,6 +6,7 @@ Terraform module to deploy one intance to host PTFE in mounted disk.
 
 Please check the [example/](example/) folder.
 
+
 ## How to deploy tfe
 
 ```
@@ -52,6 +53,39 @@ Follow the instructions, and you will end with 2 certificates.
 compute_instance_address = fqdn
 compute_instance_ip = nn.nn.nn.nn
 stackdriver_compute = https://app.google.stackdriver.com/instances/id?project=project
+```
+
+## Disk layout
+
+TODO: this
+
+```
+root@ptfe-pmd:~# df -Ph
+Filesystem      Size  Used Avail Use% Mounted on
+..
+/dev/sdb        197G   60M  187G   1% /var/lib/replicated/snapshots
+/dev/sdc        197G   60M  187G   1% /media/mount
+root@ptfe-pmd:~#
+```
+
+## Performance
+
+TODO: this
+```
+root@ptfe-pmd:~# hdparm -t /dev/sda /dev/sdb /dev/sdc /dev/nvme0n1
+
+/dev/sda:
+ Timing buffered disk reads: 736 MB in  3.01 seconds = 244.80 MB/sec
+
+/dev/sdb:
+ Timing buffered disk reads: 742 MB in  3.01 seconds = 246.74 MB/sec
+
+/dev/sdc:
+ Timing buffered disk reads: 742 MB in  3.01 seconds = 246.72 MB/sec
+
+/dev/nvme0n1:
+ Timing buffered disk reads: 2114 MB in  3.00 seconds = 704.39 MB/sec
+root@ptfe-pmd:~#
 ```
 
 alvaro@kikitux.net

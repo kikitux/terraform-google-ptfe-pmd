@@ -36,4 +36,3 @@ provider "google" {
 }
 ```
 
-
