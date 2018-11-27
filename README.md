@@ -46,4 +46,14 @@ Follow the instructions, and you will end with 2 certificates.
 - Use `/media/mount` for external mounted disk
 
 
+## Sample output
+
+```
+compute_instance_address = fqdn
+compute_instance_ip = nn.nn.nn.nn
+stackdriver_compute = https://app.google.stackdriver.com/instances/id?project=project
+```
+
 alvaro@kikitux.net
+
+

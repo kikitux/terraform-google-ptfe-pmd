@@ -42,8 +42,7 @@ provider "google" {
 }
 
 module "google-ptfe-pmd" {
-  #source                     = "github.com/kikitux/terraform-google-ptfe-pmd"
-  source                     = "../"
+  source                     = "github.com/kikitux/terraform-google-ptfe-pmd"
   disk_size_compute_mount    = "${var.disk_size_compute_mount}"
   zone                       = "${var.zone}"
   project                    = "${var.project}"
