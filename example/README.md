@@ -1,14 +1,13 @@
 # Example
 
-This is a sample code that uses the terraform-google-tfe-pmd module.
+## Pre-Requirements
 
-In order to this to work, you need to have a google key in this directory.
+- google cloud account
+- project created
+- a dns zone within the project
+- a service account, space admin in json format, `gcp.json`
 
-```
-gcp.json
-```
-
-That need to be workspace admin.
+## How to use
 
 From there review `main.tf` and adjust variables to suit.
 
