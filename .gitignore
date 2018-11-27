@@ -1,0 +1,3 @@
+gcp.json
+.terraform*
+terraform.tfstate*
