@@ -20,26 +20,13 @@ variable disk_size_compute_mount {
 
 variable dns_zone {
   description = "dns_zone"
-  default     = "gcp"
 }
 
-variable "region" {
-  default = "europe-west4"
-}
+variable "region" {}
 
-variable "zone" {
-  default = "europe-west4-a"
-}
+variable "zone" {}
 
-variable "project" {
-  default = "alvaro-space"
-}
-
-provider "google" {
-  credentials = "${file("gcp.json")}"
-  project     = "${var.project}"
-  region      = "${var.region}"
-}
+variable "project" {}
 
 module "google-ptfe-pmd" {
   source                     = "github.com/kikitux/terraform-google-ptfe-pmd"
