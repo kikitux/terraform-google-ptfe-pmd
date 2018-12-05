@@ -43,6 +43,12 @@ resource "google_compute_instance" "compute" {
   machine_type = "n1-standard-4"
   zone         = "${var.zone}"
 
+  lifecycle {
+    ignore_changes = [
+      "boot_disk.initialize_params.image",
+    ]
+  }
+
   boot_disk {
     initialize_params {
       type  = "pd-ssd"
@@ -70,6 +76,19 @@ resource "google_compute_instance" "compute" {
     access_config = {}
   }
 
+
+ # copy automated-recovery.sh
+  provisioner "file" {
+    source      = "automated-recovery.sh"
+    destination = "/root/automated-recovery.sh"
+  }
+
+  # copy delete_all.sh
+  provisioner "file" {
+    source      = "delete_all.sh"
+    destination = "/root/delete_all.sh"
+  }
+
   metadata_startup_script = <<SCRIPT
 echo processing metadata_startup_script
 
@@ -89,21 +108,27 @@ curl -sS https://dl.google.com/cloudagents/install-monitoring-agent.sh | bash
 # install the Stackdriver logging agent:
 curl -sS https://dl.google.com/cloudagents/install-logging-agent.sh | bash
 
-# docker conf to use devicemapper
+# docker conf mtu 1460
 mkdir -p /etc/docker/
 cat > /etc/docker/daemon.json <<EOF
 {
-  "storage-driver": "devicemapper",
-  "storage-opts": [
-    "dm.directlvm_device=/dev/nvme0n1",
-    "dm.thinp_percent=95",
-    "dm.thinp_metapercent=1",
-    "dm.thinp_autoextend_threshold=80",
-    "dm.thinp_autoextend_percent=20",
-    "dm.directlvm_device_force=false"
-  ]
+  "mtu": 1460
 }
 EOF
+
+# configure docker images disk
+echo "looking for snap disk ${var.compute_name}-snap"
+while [ ! -b /dev/nvme0n1 ] ; do
+  echo -n .
+  sleep 2
+done
+
+blkid /dev/nvme0n1 || mkfs /dev/nvme0n1
+grep /dev/nvme0n1 /etc/fstab || {
+  echo "/dev/nvme0n1 /var/lib/docker auto defaults 0 0" | tee -a /etc/fstab
+}
+mkdir -p /var/lib/docker
+mount -a
 
 # configure snap disk
 echo "looking for snap disk ${var.compute_name}-snap"
